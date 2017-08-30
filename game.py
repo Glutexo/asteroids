@@ -1,68 +1,56 @@
 import pyglet
+from space_objects import Spaceship
 
 
 tick_interval = 1 / 30
-spaceship_rotation_speed = 10
-spaceship_acceleration = 50
 
+# Pyglet window events
 
 def on_draw():
+    """ Redraw screen with all sprites. """
     window.clear()
     batch.draw()
 
 
 def on_key_press(symbol, modifiers):
+    """ Add to set to track the time pressed. """
     pressed_keys.add(symbol)
 
 
 def on_key_release(symbol, modifiers):
+    """ Remove from set. """
     pressed_keys.remove(symbol)
 
+# Pyglet clock events
 
 def tick(dt):
-    for object in objects:
-        object.tick(dt)
+    """ Call some methods for every object: A general _tick_ once and a _pressed_key_ for every key pressed. """
+    for (space_object, sprite) in space_objects.items():
+        space_object.tick(dt)
+        for key in pressed_keys:
+            space_object.pressed_key(key, dt)
+        sprite.x, sprite.y = space_object.x, space_object.y
 
+# Helper functions
 
-class Spaceship:
-    def __init__(self, **kwargs):
-        """
-        Spaceship (sprite) is position somewhere (x, y) in the space (window). It is pointing (rotation) and heading
-        (x_speed, y_speed) somewhere.
-        """
-        self.x_speed, self.y_speed = 0, 0
-        self.rotation = 0
-        self.sprite = kwargs['sprite']
-        self.window = kwargs['window']
+def sprite(path):
+    """ Instantiate a new Pyglet sprite in a batch. """
+    image = pyglet.image.load(path)
+    return pyglet.sprite.Sprite(image, batch=batch)
 
-    def tick(self, dt):
-        if pyglet.window.key.LEFT in pressed_keys:
-            self.x_speed -= dt * spaceship_acceleration
-        if pyglet.window.key.RIGHT in pressed_keys:
-            self.x_speed += dt * spaceship_acceleration
-        if pyglet.window.key.DOWN in pressed_keys:
-            self.y_speed -= dt * spaceship_acceleration
-        if pyglet.window.key.UP in pressed_keys:
-            self.y_speed += dt * spaceship_acceleration
-
-        self.sprite.x += dt * self.x_speed
-        self.sprite.y += dt * self.y_speed
-        self.rotation += dt * spaceship_acceleration
-
+# Instantiate global variables.
 
 window = pyglet.window.Window()
 
 batch = pyglet.graphics.Batch()
-spaceship_image = pyglet.image.load('resources/spaceship.png')
-spaceship_sprite = pyglet.sprite.Sprite(spaceship_image, batch=batch)
-
-spaceship = Spaceship(window=window, sprite=spaceship_sprite)
-
-objects = [spaceship]
+space_objects = { Spaceship(): sprite('resources/spaceship.png') }
 pressed_keys = set()
 
+# Bind events.
 
 window.push_handlers(on_draw=on_draw, on_key_press=on_key_press, on_key_release=on_key_release)
 pyglet.clock.schedule_interval(tick, tick_interval)
+
+# And run!
 
 pyglet.app.run()
