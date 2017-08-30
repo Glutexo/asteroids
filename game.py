@@ -38,8 +38,21 @@ def tick(dt):
         game_object.space_object.tick(dt)
         for key in pressed_keys:
             game_object.space_object.pressed_key(key, dt)
+
+        # Reposition the spaceship on the opposite side of the window when it leaves its boundaries.
+        while game_object.space_object.x < 0:
+            game_object.space_object.x = window.width - -game_object.space_object.x
+        while game_object.space_object.x > window.width:
+            game_object.space_object.x = game_object.space_object.x - window.width
+        while game_object.space_object.y < 0:
+            game_object.space_object.y = window.height - -game_object.space_object.y
+        while game_object.space_object.y > window.height:
+            game_object.space_object.y = game_object.space_object.y - window.height
+
         game_object.sprite.x, game_object.sprite.y = game_object.space_object.x, game_object.space_object.y
         game_object.sprite.rotation = game_object.space_object.rotation + game_object.rotation
+
+
 
 
 # Helper functions
