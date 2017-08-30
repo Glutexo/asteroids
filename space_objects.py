@@ -23,11 +23,12 @@ def spaceship_rotation(dt):
 class Spaceship:
     """ The player’s character. Keyboard controllable. """
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, rotation=0):
         """ Initialize with zero defaults. """
         self.x, self.y = x, y
+        self.rotation = rotation
+
         self.x_speed, self.y_speed = 0, 0
-        self.rotation = 0
 
     def tick(self, dt):
         """ Move the spaceship according to its speed. """

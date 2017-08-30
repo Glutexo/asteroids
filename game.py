@@ -1,7 +1,9 @@
 import pyglet
 from space_objects import Spaceship
 from collections import namedtuple
+from random import randrange
 
+MAX_ANGLE = 360 - 1
 
 TICK_INTERVAL = 1 / 30
 
@@ -18,6 +20,9 @@ def on_draw():
 def on_key_press(symbol, modifiers):
     """ Add to set to track the time pressed. """
     pressed_keys.add(symbol)
+
+    if symbol == pyglet.window.key.A:
+        add_spaceship(randrange(0, window.width - 1), randrange(0, window.height - 1), randrange(0, MAX_ANGLE))
 
 
 def on_key_release(symbol, modifiers):
@@ -70,6 +75,10 @@ def sprite(path, scale=1):
     return sprite
 
 
+def add_spaceship(x, y, rotation):
+    spaceship = GameObject(Spaceship(x, y, rotation), sprite('resources/spaceship.png', 0.5), 90)
+    space_objects.add(spaceship)
+
 # Helper structs.
 
 
@@ -82,9 +91,8 @@ GameObject = namedtuple('GameObject', ['space_object', 'sprite', 'rotation'])
 window = pyglet.window.Window()
 
 batch = pyglet.graphics.Batch()
-space_objects = set([
-    GameObject(Spaceship(window.width // 2, window.height // 2), sprite('resources/spaceship.png', 0.5), 90)
-])
+space_objects = set()
+add_spaceship(window.width // 2, window.height // 2, 0)
 pressed_keys = set()
 
 # Bind events.
@@ -94,4 +102,6 @@ pyglet.clock.schedule_interval(tick, TICK_INTERVAL)
 
 # And run!
 
+print("""Controls:
+A – add another spaceship""")
 pyglet.app.run()
