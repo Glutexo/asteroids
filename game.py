@@ -2,7 +2,7 @@ import pyglet
 from space_objects import Spaceship
 
 
-tick_interval = 1 / 30
+TICK_INTERVAL = 1 / 30
 
 # Pyglet window events
 
@@ -49,7 +49,7 @@ pressed_keys = set()
 # Bind events.
 
 window.push_handlers(on_draw=on_draw, on_key_press=on_key_press, on_key_release=on_key_release)
-pyglet.clock.schedule_interval(tick, tick_interval)
+pyglet.clock.schedule_interval(tick, TICK_INTERVAL)
 
 # And run!
 

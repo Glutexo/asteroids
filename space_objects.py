@@ -1,6 +1,6 @@
 from pyglet.window.key import LEFT, RIGHT, DOWN, UP
 
-spaceship_acceleration = 50
+SPACESHIP_ACCELERATION = 50
 
 class Spaceship:
     """ The player’s character. Keyboard controllable, moving along cartesian coordinates."""
@@ -19,10 +19,10 @@ class Spaceship:
     def pressed_key(self, key, dt):
         """ Key presses adjust the x_ and y_speed. making the spaceship move cartesian way."""
         if key == LEFT:
-            self.x_speed -= dt * spaceship_acceleration
+            self.x_speed -= dt * SPACESHIP_ACCELERATION
         if key == RIGHT:
-            self.x_speed += dt * spaceship_acceleration
+            self.x_speed += dt * SPACESHIP_ACCELERATION
         if key == DOWN:
-            self.y_speed -= dt * spaceship_acceleration
+            self.y_speed -= dt * SPACESHIP_ACCELERATION
         if key == UP:
-            self.y_speed += dt * spaceship_acceleration
+            self.y_speed += dt * SPACESHIP_ACCELERATION
