@@ -14,7 +14,14 @@ TICK_INTERVAL = 1 / 30
 def on_draw():
     """ Redraw screen with all sprites. """
     window.clear()
-    batch.draw()
+
+    # Draw the whole field 3 × 3 times around the actual window. This makes smooth transition when space object leaves
+    # the window. This hack will however make collision detection less reliable in the future.
+    for x_offset in (-window.width, 0, window.width):
+        for y_offset in (-window.height, 0, window.height):
+            pyglet.gl.glTranslatef(x_offset, y_offset, 0)
+            batch.draw()
+            pyglet.gl.glTranslatef(-x_offset, -y_offset, 0)
 
 
 def on_key_press(symbol, modifiers):
